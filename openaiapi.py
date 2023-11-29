@@ -2,7 +2,6 @@ from typing import Annotated
 from fastapi import FastAPI, Form, File
 
 from faster_whisper import WhisperModel
-import torch
 import os
 from io import BytesIO
 import dotenv
@@ -12,10 +11,9 @@ LOGGER = logging.getLogger(__name__)
 dotenv.load_dotenv()
 
 DEFAULTS = {
-    "MODEL_SIZE": "large-v3",
+    "MODEL_SIZE": "tiny",
     "DEVICE_TYPE": "cuda",
     "COMPUTE_TYPE": "float16",
-    "DEVICE": "cuda:0",
     "BEAM_SIZE": 5,
     "VAD_FILTER": "true",
     "MIN_SILENCE_DURATION_MS": 50,
@@ -37,9 +35,6 @@ def get_float_env(key):
 def get_bool_env(key):
     return get_env(key).lower() == 'true'
 
-
-device = torch.device('cuda:0')
-LOGGER.info(f'Using device: {device}')
 
 model_size = get_env("MODEL_SIZE")
 device_type = get_env("DEVICE_TYPE")
